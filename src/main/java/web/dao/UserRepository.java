@@ -3,23 +3,38 @@ package web.dao;
 import org.springframework.stereotype.Repository;
 import web.model.User;
 
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class UserRepository {
-
-    List<User> users = new ArrayList<>();
-
-    {
-        users.add(new User("Petr", "Kotov", (byte) 27));
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public List<User> getUsers() {
-        return users;
+        return entityManager.createQuery("from User", User.class).getResultList();
     }
 
-//    public void save(User user) {
-//        users.add(user);
-//    }
+    public void save(User user) {
+        entityManager.persist(user);
+    }
+
+    public User getUser(Long id) {
+        return entityManager.createQuery("from User where id=:id", User.class)
+                .setParameter("id", id).getSingleResult();
+    }
+
+    public void update(User updateUser, long id) {
+        User user = getUser(id);
+        user.setName(updateUser.getName());
+        user.setLastName(updateUser.getLastName());
+        user.setAge(updateUser.getAge());
+        entityManager.merge(user);
+    }
+
+    public void deleteUser(long id) {
+        User user = entityManager.find(User.class,id);
+        entityManager.remove(user);
+    }
 }

@@ -4,7 +4,10 @@ import org.springframework.stereotype.Service;
 import web.dao.UserRepository;
 import web.model.User;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+
 @Service
 public class UserServiceImp implements UserService {
     private final UserRepository userRepository;
@@ -13,12 +16,31 @@ public class UserServiceImp implements UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User>showAllUser(){
+    @Override
+    public List<User> showAllUser() {
         return userRepository.getUsers();
     }
 
+    @Transactional
     @Override
     public void add(User user) {
-        userRepository.getUsers().add(user);
+        userRepository.save(user);
+    }
+
+    @Override
+    public User findUser(long id) {
+        return userRepository.getUser(id);
+    }
+
+    @Transactional
+    @Override
+    public void update(User user, long id) {
+        userRepository.update(user, id);
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id) {
+        userRepository.deleteUser(id);
     }
 }
