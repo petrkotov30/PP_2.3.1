@@ -11,8 +11,6 @@ import java.util.List;
 public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
-    private User user;
-
     public List<User> getUsers() {
         return entityManager.createQuery("from User", User.class).getResultList();
     }
@@ -26,7 +24,7 @@ public class UserRepository {
     }
 
     public void update(User updateUser, Long id) {
-        user = getUser(id);
+        User user = getUser(id);
         user.setName(updateUser.getName());
         user.setLastName(updateUser.getLastName());
         user.setAge(updateUser.getAge());
@@ -34,7 +32,7 @@ public class UserRepository {
     }
 
     public void deleteUser(Long id) {
-        user = getUser(id);
+        User user = getUser(id);
         entityManager.remove(user);
     }
 }
