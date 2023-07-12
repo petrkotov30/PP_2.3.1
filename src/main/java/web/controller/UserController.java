@@ -35,20 +35,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable long id) {
+    public String edit(Model model, @PathVariable Long id) {
         model.addAttribute("user", userService.findUser(id));
         return "edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute User user, @PathVariable("id") long id) {
+    public String update(@ModelAttribute User user, @PathVariable("id") Long id) {
         userService.update(user, id);
-        System.out.println(user.getName());
         return "redirect:/users";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id) {
+    public String delete(@PathVariable Long id) {
         userService.delete(id);
         return "redirect:/users";
     }
